@@ -5,10 +5,10 @@ import { CheckCircle, AlertTriangle, XCircle, TrendingUp, TrendingDown } from 'l
 export const OverallStatus = () => {
   // Simulate sensor data - in real app this would come from API/props
   const sensorData = {
-    co2: 399, // Current CO2 level 415
-    ch4: 1.9, // Current CH4 level 1.9
-    n2o: 0.3, // Current N2O level 0.3
-    sf6: 0.001, // Current SF6 level 0.008
+    co2: 550, // Current CO2 level 415
+    ch4: 4.0, // Current CH4 level 1.9
+    n2o: 0.8, // Current N2O level 0.3
+    sf6: 0.09, // Current SF6 level 0.008
   };
 
   // Define thresholds
