@@ -1,73 +1,196 @@
-# Welcome to your Lovable project
+# GreenGuard: Real-Time Greenhouse Gas Monitoring System
 
-## Project info
+> **A student-led project from the Federal University of Technology Akure (FUTA)**
 
-**URL**: https://lovable.dev/projects/ea852fbe-9ce4-4b85-b896-c45ee2493f8b
+---
 
-## How can I edit this code?
+## 📖 Table of Contents
 
-There are several ways of editing your application.
+1. [Project Overview](#project-overview)
+2. [Motivation & Context](#motivation--context)
+3. [Team Members](#team-members)
+4. [Architecture & Components](#architecture--components)
 
-**Use Lovable**
+   * [Hardware](#hardware)
+   * [Firmware (ESP32)](#firmware-esp32)
+   * [Dashboard (React)](#dashboard-react)
+5. [Directory Structure](#directory-structure)
+6. [Getting Started](#getting-started)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ea852fbe-9ce4-4b85-b896-c45ee2493f8b) and start prompting.
+   * [Prerequisites](#prerequisites)
+   * [Backend Setup (ESP32)](#backend-setup-esp32)
+   * [Frontend Setup (Dashboard)](#frontend-setup-dashboard)
+7. [Usage](#usage)
+8. [Testing & Validation](#testing--validation)
+9. [Future Enhancements](#future-enhancements)
+10. [Contributing](#contributing)
+11. [License](#license)
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## Project Overview
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+GreenGuard is an IoT-based solution designed by FUTA students to monitor greenhouse gas emissions (CO₂, CH₄, etc.) in real time. Using an ESP32 microcontroller coupled with gas sensors and a beautiful React dashboard, GreenGuard empowers industries and researchers to:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+* **Detect** and **display** current gas concentrations.
+* **Alert** users via visual indicators when thresholds are exceeded.
+* **Log** data remotely through MQTT for further analysis.
 
-Follow these steps:
+## Motivation & Context
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Climate change poses growing risks to communities worldwide. According to the IPCC, global greenhouse gas emissions have risen by 45% since 1990, driving extreme weather events, health issues, and biodiversity loss. GreenGuard was conceived as part of a final-year capstone at FUTA to:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+* Provide a **low-cost**, **scalable** monitoring platform.
+* Foster **hands-on learning** in embedded systems and web development.
+* Enable **data-driven decisions** for emission reduction.
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Team Members
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+| Name                         | Role                         |
+| ---------------------------- | ---------------------------- |
+|  ------   ----               | Hardware Design & Testing    |
+| Chuk---  -----               | Embedded Firmware Engineer   |
+|  **\*\*\*\*       \***\*\*\* | Frontend Dashboard Developer |
+|  ------    -------           | Cloud & MQTT Integration     |
+|  &&&&   &&&                  | Project Lead (Mentor & AI)   |
+
+## Architecture & Components
+
+### Hardware
+
+* **ESP32 Dev Module**: Wi-Fi & Bluetooth connectivity
+* **MH-Z19B Sensor**: Non-dispersive infrared (NDIR) CO₂ measurements
+* **MQ-4 Sensor**: Analog CH₄ detection
+* **RGB LED**: Visual traffic-light indicator (Green/Yellow/Red)
+* **Power Supply**: 5V USB or battery pack
+
+### Firmware (ESP32)
+
+* Structured with **PlatformIO** (VS Code) and **Arduino framework**
+* Modular headers:
+
+  * `sensor_co2.h` (CO₂ readout)
+  * `sensor_ch4.h` (CH₄ analog input)
+  * `indicators.h` (LED logic)
+  * `wifi_mqtt.h` (Wi-Fi & MQTT client)
+* Configuration in `include/config.h`
+
+### Dashboard (React)
+
+* Built with **React**, **Vite**, **TailwindCSS**, and **Recharts**
+* Real-time data via **MQTT** (`mqtt.js` client)
+* Responsive & PWA-ready with manifest and service-worker
+
+## Directory Structure
+
+```
+greenguard-system/
+├── backend/                 # ESP32 firmware
+│   ├── include/
+│   │   └── config.h
+│   ├── src/
+│   │   ├── main.ino
+│   │   ├── sensor_co2.h
+│   │   ├── sensor_ch4.h
+│   │   ├── indicators.h
+│   │   └── wifi_mqtt.h
+│   ├── platformio.ini
+│   └── README.md            # Hardware wiring & upload guide
+└── dashboard/               # React dashboard
+    ├── public/
+    │   ├── index.html
+    │   ├── manifest.json
+    │   ├── favicon.ico
+    │   └── logo-*.png
+    ├── src/
+    │   ├── components/Charts.js
+    │   ├── pages/Dashboard.js
+    │   └── App.js
+    ├── .env
+    ├── package.json
+    └── README.md            # Frontend setup & usage
 ```
 
-**Edit a file directly in GitHub**
+## Getting Started
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Prerequisites
 
-**Use GitHub Codespaces**
+* **VS Code** with **PlatformIO IDE** extension
+* **Node.js** (v16+)
+* **npm** or **yarn**
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Backend Setup (ESP32)
 
-## What technologies are used for this project?
+1. **Open** VS Code, install **PlatformIO IDE**.
+2. **Clone** the repo and open the `backend/` folder.
+3. **Edit** `include/config.h`:
 
-This project is built with:
+   ```cpp
+   #define WIFI_SSID     "Your_SSID"
+   #define WIFI_PASSWORD "Your_Password"
+   #define MQTT_SERVER   "broker.hivemq.com"
+   #define MQTT_PORT     1883
+   #define MQTT_TOPIC    "greenguard/gases"
+   ```
+4. **Connect** ESP32 via USB.
+5. In PlatformIO sidebar, click **Upload** to compile and flash.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Frontend Setup (Dashboard)
 
-## How can I deploy this project?
+1. **Navigate** to `dashboard/`:
 
-Simply open [Lovable](https://lovable.dev/projects/ea852fbe-9ce4-4b85-b896-c45ee2493f8b) and click on Share -> Publish.
+   ```bash
+   cd dashboard
+   ```
+2. **Install** dependencies:
 
-## Can I connect a custom domain to my Lovable project?
+   ```bash
+   npm install
+   ```
+3. **Configure** `.env`:
 
-Yes, you can!
+   ```env
+   VITE_MQTT_BROKER=wss://test.mosquitto.org:8081
+   VITE_MQTT_TOPIC=greenguard/gases
+   ```
+4. **Run** the dashboard:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+   ```bash
+   npm run dev
+   ```
+5. **Open** [http://localhost:3000](http://localhost:3000) in your browser.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Usage
+
+* **Real-time Monitoring**: Observe live CO₂ & CH₄ levels on the bar chart.
+* **Visual Alerts**: LED turns Yellow when levels approach thresholds, Red on danger.
+* **PWA Features**: Install on mobile, receive push notifications (optional extension).
+
+## Testing & Validation
+
+1. **Sensor Calibration**: Burn in MQ-4 for 24h; verify MH-Z19 with known CO₂ source.
+2. **Simulate Alerts**: Expose to CO₂ canisters or methane source safely.
+3. **MQTT Debug**: Use MQTT Explorer to inspect published messages.
+
+## Future Enhancements
+
+* **Additional Gases**: N₂O, HFCs, PFCs via specialized sensors
+* **Historical Dashboard**: Persist data in InfluxDB or Firebase for trend analysis
+* **Mobile App**: React Native companion app with push alerts
+* **Government Integration**: API endpoints for regulatory reporting
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/XYZ`)
+3. Commit changes (`git commit -m "Add XYZ feature"`)
+4. Push to branch (`git push origin feature/XYZ`)
+5. Open a Pull Request
+
+## License
+
+This project is released under the **MIT License**. See [LICENSE](LICENSE) for details.
+
+---
+
+*© 2025 FUTA GreenGuard Team*
